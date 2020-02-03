@@ -1,5 +1,5 @@
 
-export interface Item {
+export class Item {
     name: string;
     quantity: number;
     price: number;
@@ -7,7 +7,7 @@ export interface Item {
     isImported: boolean;
 }
 
-export interface ShoppingBasket {
+export class ShoppingBasket {
     basketId: number;
     items: Item[];
     salesTax: number;
@@ -15,13 +15,10 @@ export interface ShoppingBasket {
     total: number;
 }
 
-export interface ShoppingList {
+export class ShoppingList {
     shoppingBasket: ShoppingBasket;
 }
 
-export interface Shopping {
+export class Shopping {
     shoppingList: ShoppingList[];
 }
-
-
-

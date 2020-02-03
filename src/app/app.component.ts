@@ -1,7 +1,10 @@
-import { DataService } from './services/data.service';
+import { AppState } from './store/models/app-state.model';
+import { ShoppingService } from './services/shopping.service';
 import { Component, OnInit } from '@angular/core';
-// import shoppingBasketData from '../assets/shoppingitems.json';
-import { Shopping } from './models/shopping-item.model';
+import { Shopping, ShoppingList } from './store/models/shopping-item.model';
+import { Store } from '@ngrx/store';
+import { Observable, of } from 'rxjs';
+import { GetShoppingDataAction } from './store/actions/shopping.actions';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +13,21 @@ import { Shopping } from './models/shopping-item.model';
 })
 export class AppComponent implements OnInit {
   shopping: Shopping;
-  jsonData = '';
+  shoppingList$: Observable<Array<ShoppingList>>;
 
-  constructor(private dataSvc: DataService) { }
+  // tslint:disable-next-line:ban-types
+  loading$: Observable<Boolean>;
+  error$: Observable<Error>;
+
+  constructor(private store: Store<AppState>, private dataSvc: ShoppingService) { }
 
   ngOnInit() {
+    this.shoppingList$ = this.store.select(store => store.shopping.shopping);
+    this.loading$ = this.store.select(store => store.shopping.loading);
+    this.error$ = this.store.select(store => store.shopping.error);
+    this.store.dispatch(new GetShoppingDataAction());
+
+    // observable (ngrx) not working so just make the http call and do the calculations
     this.getShoppingItems();
   }
 
@@ -46,6 +59,10 @@ export class AppComponent implements OnInit {
         r.shoppingBasket.total += i.price;
       });
     });
+  }
+
+  saveData() {
+    localStorage.setItem('shoppingList', JSON.stringify(this.shopping));
   }
 
 }

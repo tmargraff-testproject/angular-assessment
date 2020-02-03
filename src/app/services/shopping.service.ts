@@ -1,12 +1,12 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Shopping } from './../models/shopping-item.model';
+import { Shopping } from '../store/models/shopping-item.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
+export class ShoppingService {
 
   constructor(private http: HttpClient) {}
 
